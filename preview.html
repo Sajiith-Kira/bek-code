@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bek Code</title>
+
+<style>
+body{
+    background:#001a00;
+    color:#00ff00;
+    font-family: Courier New, monospace;
+    text-align:center;
+    padding:40px;
+}
+
+h1{
+    font-weight:normal;
+}
+
+textarea{
+    width:80%;
+    height:120px;
+    margin:10px;
+    padding:10px;
+    background:#003300;
+    color:#00ff00;
+    border:1px solid #00ff00;
+}
+
+button{
+    padding:8px 18px;
+    margin:5px;
+    border:1px solid #00ff00;
+    background:#001a00;
+    color:#00ff00;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#00ff00;
+    color:#001a00;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Bek Code Converter</h1>
+
+<textarea id="input" placeholder="Enter text or Bek code"></textarea><br>
+
+<button onclick="encode()">Convert to Bek</button>
+<button onclick="decode()">Decode Bek</button>
+
+<h3>Result</h3>
+
+<textarea id="output" readonly></textarea><br>
+<button onclick="copyText()">Copy Result</button>
+
+<script>
+
+let j = {
+'a':'////','b':'///,','c':'//,/','d':'//,,',
+'e':'/,/,','f':'/,,/','g':'/,,,','h':',///',
+'i':',//,','j':',/,/','k':',/,,','l':',,//',
+'m':',,/,','n':',,,/','o':',,,,','p':'((((',
+'q':'((()','r':'(()(','s':'(())','t':'()((',
+'u':'()()','v':'())(','w':'()))','x':')(()',
+'y':')()(','z':')())',
+' ':'====',',':'==0=',
+'0':'-///','1':'-//-','2':'-/-/','3':'-/--',
+'4':'--//','5':'--/-','6':'---/','7':'----',
+'8':'/===','9':'/==-'
+};
+
+let k = {};
+for (let key in j){
+    k[j[key]] = key;
+}
+
+function encode(){
+    let text = document.getElementById("input").value.toLowerCase();
+    let result = "";
+    for(let i=0;i<text.length;i++){
+        if(j[text[i]]){
+            result += j[text[i]];
+        }
+    }
+    document.getElementById("output").value = result;
+}
+
+function decode(){
+    let text = document.getElementById("input").value;
+    let result = "";
+
+    if(text.length % 4 !== 0){
+        alert("Invalid Bek Code Length");
+        return;
+    }
+
+    for(let i=0;i<text.length;i+=4){
+        let chunk = text.substring(i,i+4);
+        if(k[chunk]){
+            result += k[chunk];
+        }
+    }
+
+    document.getElementById("output").value = result;
+}
+
+function copyText(){
+    let output = document.getElementById("output");
+    output.select();
+    document.execCommand("copy");
+    alert("Copied!");
+}
+
+</script>
+
+</body>
+</html>
